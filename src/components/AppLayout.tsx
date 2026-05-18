@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, Settings, Activity, Menu, X } from "lucide-react";
+import { LayoutDashboard, Settings, Activity, Menu, TrendingUp } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 const navItems = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/vendas", label: "Vendas", icon: TrendingUp },
+  { to: "/", label: "Dash IA", icon: LayoutDashboard },
   { to: "/integracoes", label: "Integrações", icon: Settings },
 ];
 
@@ -13,16 +14,35 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground">
+    <div
+      className="flex flex-col h-full"
+      style={{
+        background: "hsl(var(--background))",
+        borderRight: "1px solid rgba(248,249,250,0.08)",
+      }}
+    >
       {/* Logo */}
-      <div className="p-5 border-b border-sidebar-border">
+      <div
+        className="p-5"
+        style={{ borderBottom: "1px solid rgba(248,249,250,0.08)" }}
+      >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center">
+          <div
+            className="w-9 h-9 flex items-center justify-center"
+            style={{
+              background: "hsl(var(--primary))",
+              borderRadius: "4px",
+            }}
+          >
             <Activity className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-tight text-white">SalesRev</h1>
-            <p className="text-[10px] text-white/60">Dashboard CRM</p>
+            <h1 className="text-base font-bold tracking-tight text-foreground">
+              SalesRev
+            </h1>
+            <p className="text-[10px]" style={{ color: "rgba(248,249,250,0.50)" }}>
+              Dashboard CRM
+            </p>
           </div>
         </div>
       </div>
@@ -39,11 +59,21 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
               key={item.to}
               to={item.to}
               onClick={onNav}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-white/20 text-white"
-                  : "text-white/70 hover:bg-white/10 hover:text-white"
-              }`}
+              className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors"
+              style={{
+                borderRadius: "4px",
+                background: isActive ? "rgba(227,25,55,0.12)" : "transparent",
+                color: isActive ? "#E31937" : "rgba(248,249,250,0.70)",
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive)
+                  (e.currentTarget as HTMLElement).style.background =
+                    "rgba(248,249,250,0.04)";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive)
+                  (e.currentTarget as HTMLElement).style.background = "transparent";
+              }}
             >
               <item.icon className="w-4 h-4" />
               {item.label}
@@ -52,9 +82,22 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-3 border-t border-sidebar-border">
-        <p className="text-[10px] text-white/40 text-center">SalesRev</p>
+      {/* Footer wordmark */}
+      <div
+        className="p-4"
+        style={{ borderTop: "1px solid rgba(248,249,250,0.08)" }}
+      >
+        <p
+          className="text-center"
+          style={{
+            fontSize: "10px",
+            fontWeight: 700,
+            letterSpacing: "0.2em",
+            color: "rgba(248,249,250,0.30)",
+          }}
+        >
+          SALESREV
+        </p>
       </div>
     </div>
   );
@@ -73,10 +116,20 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile header */}
-        <header className="lg:hidden sticky top-0 z-30 bg-sidebar px-3 py-2.5 flex items-center gap-3 shadow-md">
+        <header
+          className="lg:hidden sticky top-0 z-30 px-3 py-2.5 flex items-center gap-3"
+          style={{
+            background: "hsl(var(--background))",
+            borderBottom: "1px solid rgba(248,249,250,0.08)",
+          }}
+        >
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 h-8 w-8">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-foreground hover:bg-white/10 h-8 w-8"
+              >
                 <Menu className="w-5 h-5" />
               </Button>
             </SheetTrigger>
@@ -84,7 +137,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SidebarContent onNav={() => setOpen(false)} />
             </SheetContent>
           </Sheet>
-          <h1 className="text-sm font-bold text-white">SalesRev</h1>
+          <h1 className="text-sm font-bold text-foreground">SalesRev</h1>
         </header>
 
         {/* Content */}

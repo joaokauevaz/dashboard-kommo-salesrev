@@ -2,59 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* ── SalesRev Design System ──
+   Dark theme. Crimson accent. Space Grotesk.
+   shadcn HSL tokens redefined to match raw spec.
 */
 
-@layer base {
-  :root {
-    /* PSI Terapia - White + Wine Red theme */
-    --background: 0 0% 97%;
-    --foreground: 0 0% 12%;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 12%;
+:root {
+  /* Raw palette (reference) */
+  --smoky-black: #130a06;
+  --ghost-white: #f8f9fa;
+  --crimson: #e31937;
+  --crimson-700: #c01530;
+  --nokia-blue: #005aff;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 12%;
+  --bg-hex: #130a06;
+  --surface-hex: #1b110c;
+  --surface-2-hex: #261912;
 
-    --primary: 345 60% 35%;
-    --primary-foreground: 0 0% 100%;
+  /* shadcn HSL tokens — mapped to the SalesRev palette */
+  --background: 18 52% 5%;
+  --foreground: 210 17% 98%;
 
-    --secondary: 345 15% 95%;
-    --secondary-foreground: 345 60% 35%;
+  --card: 22 39% 8%;
+  --card-foreground: 210 17% 98%;
 
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 45%;
+  --popover: 22 39% 8%;
+  --popover-foreground: 210 17% 98%;
 
-    --accent: 345 20% 93%;
-    --accent-foreground: 345 60% 30%;
+  --primary: 351 78% 49%;
+  --primary-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+  --secondary: 18 36% 11%;
+  --secondary-foreground: 210 17% 98%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 345 60% 35%;
+  --muted: 18 36% 11%;
+  --muted-foreground: 210 10% 65%;
 
-    --radius: 0.75rem;
+  --accent: 18 36% 14%;
+  --accent-foreground: 210 17% 98%;
 
-    --sidebar-background: 345 60% 35%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 345 60% 35%;
-    --sidebar-accent: 345 50% 30%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 345 50% 30%;
-    --sidebar-ring: 345 60% 45%;
+  --destructive: 351 78% 49%;
+  --destructive-foreground: 0 0% 100%;
 
-    /* Custom PSI colors */
-    --psi-wine: 345 60% 35%;
-    --psi-wine-dark: 345 65% 25%;
-    --psi-wine-light: 345 40% 90%;
-    --psi-gold: 40 70% 55%;
-    --psi-gold-light: 40 60% 92%;
-  }
+  --border: 210 14% 22%;
+  --input: 210 14% 22%;
+  --ring: 351 78% 49%;
+
+  --radius: 0.5rem;
+
+  /* Sidebar */
+  --sidebar-background: 18 52% 5%;
+  --sidebar-foreground: 210 17% 98%;
+  --sidebar-primary: 351 78% 49%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 18 36% 11%;
+  --sidebar-accent-foreground: 210 17% 98%;
+  --sidebar-border: 210 14% 16%;
+  --sidebar-ring: 351 78% 49%;
+
+  /* Legacy psi-* tokens remapped so existing usages stay on-theme */
+  --psi-wine: 351 78% 49%;
+  --psi-wine-dark: 351 80% 41%;
+  --psi-wine-light: 351 60% 18%;
+  --psi-gold: 40 88% 59%;
+  --psi-gold-light: 40 50% 18%;
+
+  /* Status */
+  --success: 159 81% 42%;
+  --warning: 40 88% 59%;
 }
 
 @layer base {
@@ -62,7 +83,70 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html,
   body {
-    @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: hsl(var(--foreground));
+    margin: 0;
+  }
+
+  ::selection {
+    background: hsl(var(--primary));
+    color: #fff;
+  }
+}
+
+/* SalesRev utility classes */
+@layer components {
+  .sr-card {
+    @apply bg-card border border-border rounded-md p-6;
+  }
+
+  .sr-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: hsl(210 10% 65%);
+  }
+
+  .sr-kpi {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: hsl(var(--foreground));
+    letter-spacing: -0.02em;
+  }
+
+  .sr-divider {
+    border-top: 1px solid hsl(210 14% 16%);
+  }
+
+  .sr-positive {
+    color: hsl(var(--success));
+  }
+  .sr-negative {
+    color: hsl(var(--primary));
   }
 }
