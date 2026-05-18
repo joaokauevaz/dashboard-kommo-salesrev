@@ -846,6 +846,7 @@ export default function Dashboard() {
           { bg: "bg-yellow-50", border: "border-yellow-200", text: "text-yellow-600" },
           { bg: "bg-lime-50", border: "border-lime-200", text: "text-lime-600" },
           { bg: "bg-teal-50", border: "border-teal-200", text: "text-teal-600" },
+          { bg: "bg-emerald-50", border: "border-emerald-200", text: "text-emerald-600" },
         ];
 
         return (
