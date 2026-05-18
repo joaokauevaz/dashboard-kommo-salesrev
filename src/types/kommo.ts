@@ -101,7 +101,7 @@ export interface CadenciaRecuperacaoRow {
 
 // ── Edge Function Request/Response ──
 export interface KommoEngineRequest {
-  action: "test_connection" | "crm_data" | "fetch_leads" | "fetch_pipelines";
+  action: "test_connection" | "crm_data" | "fetch_leads" | "fetch_all_leads" | "fetch_pipelines";
   subdomain: string;
   api_token: string;
   filters?: Record<string, unknown>;
