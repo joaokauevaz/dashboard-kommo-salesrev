@@ -28,6 +28,7 @@ interface RequestBody {
     | "test_connection"
     | "crm_data"
     | "fetch_leads"
+    | "fetch_all_leads"
     | "fetch_pipelines"
     | "list_tags"
     | "list_custom_fields"
@@ -35,6 +36,7 @@ interface RequestBody {
   subdomain: string;
   api_token: string;
   tag?: string;
+  pipeline_id?: number;
   field_id?: number;
   value_after?: string;
   date_from?: number;
@@ -252,6 +254,48 @@ async function fetchLeadsByTag(
   return {
     leads: allMatched,
     debug: `Query "${tagName}": ${allMatched.length} leads (2 passes: updated_at + created_at).`,
+  };
+}
+
+// ── Fetch ALL leads from a pipeline (no tag filter) ──
+async function fetchLeadsByPipeline(
+  subdomain: string,
+  token: string,
+  pipelineId: number
+): Promise<{ leads: any[]; debug: string }> {
+  const allLeads: any[] = [];
+  const seenIds = new Set<number>();
+  const limit = 250;
+  const maxPages = 40; // up to 10.000 leads
+  let page = 1;
+
+  while (page <= maxPages) {
+    const res = await kommoFetch(
+      subdomain,
+      token,
+      `/leads?filter[pipeline_id]=${pipelineId}&limit=${limit}&page=${page}&order[updated_at]=desc`
+    );
+
+    if (res.status === 204) break;
+    if (!res.ok || !res.data) break;
+
+    const leads = res.data?._embedded?.leads ?? [];
+    if (leads.length === 0) break;
+
+    for (const lead of leads) {
+      if (!seenIds.has(lead.id)) {
+        seenIds.add(lead.id);
+        allLeads.push(lead);
+      }
+    }
+
+    if (leads.length < limit) break;
+    page++;
+  }
+
+  return {
+    leads: allLeads,
+    debug: `Pipeline ${pipelineId}: ${allLeads.length} leads em ${page} páginas.`,
   };
 }
 
@@ -612,6 +656,21 @@ serve(async (req) => {
         success: true,
         leads: result.leads,
         tag,
+        debug: result.debug,
+      });
+    }
+
+    // ── Fetch All Leads (by pipeline, no tag filter) ──
+    if (action === "fetch_all_leads") {
+      const pipelineId = body.pipeline_id;
+      if (!pipelineId) {
+        return jsonResponse({ success: false, error: "pipeline_id é obrigatório para fetch_all_leads" }, 400);
+      }
+      const result = await fetchLeadsByPipeline(subdomain, api_token, pipelineId);
+      return jsonResponse({
+        success: true,
+        leads: result.leads,
+        pipeline_id: pipelineId,
         debug: result.debug,
       });
     }
