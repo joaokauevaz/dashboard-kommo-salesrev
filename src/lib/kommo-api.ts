@@ -66,8 +66,8 @@ export async function testConnection(): Promise<{
   return callEngine("test_connection");
 }
 
-export async function fetchLeads(): Promise<KommoLead[]> {
-  const res = await callEngine("fetch_leads");
+export async function fetchLeads(params?: Record<string, unknown>): Promise<KommoLead[]> {
+  const res = await callEngine("fetch_leads", params);
   return (res.leads ?? []) as KommoLead[];
 }
 
