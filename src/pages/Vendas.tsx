@@ -85,7 +85,7 @@ export default function Vendas() {
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ["vendas-data"],
     queryFn: async () => {
-      const [leads, pipelines] = await Promise.all([fetchLeads(), fetchPipelines()]);
+      const [leads, pipelines] = await Promise.all([fetchLeads({ pipeline_id: 11048703 }), fetchPipelines()]);
       return { leads, pipelines };
     },
     enabled: connected,
