@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AppLayout from "./components/AppLayout";
 import Dashboard from "./pages/Dashboard";
+import Vendas from "./pages/Vendas";
 import Integracoes from "./pages/Integracoes";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -19,6 +20,7 @@ const App = () => (
         <AppLayout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/vendas" element={<Vendas />} />
             <Route path="/integracoes" element={<Integracoes />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
